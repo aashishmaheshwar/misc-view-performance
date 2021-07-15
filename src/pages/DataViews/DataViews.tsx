@@ -2,8 +2,18 @@ import React, { useState, Profiler, ProfilerOnRenderCallback } from "react";
 import { Heading, Button, Flex, Box } from "@chakra-ui/react";
 import { viewTypeContainerStyles } from "./DataViewsStyles";
 import ViewTypeSelection from "./components/ViewTypeSelection";
+import Table from "./components/Table";
+import GroupedTable from "./components/GroupedTable";
+import Tiles from "./components/Tiles";
 
 export type ViewType = "table" | "grouped table" | "tiles";
+export interface Comment {
+  id: number;
+  postId: number;
+  name: string;
+  email: string;
+  body: string;
+}
 
 const DataViews = () => {
   const [viewType, setViewType] = useState<ViewType>("table");
@@ -42,13 +52,29 @@ const DataViews = () => {
   };
 
   const buildViewContainer = () => {
-    // testing
     if (started) {
-      return (
-        <Profiler id="table" onRender={handleProfile}>
-          <div>table renders here</div>
-        </Profiler>
-      );
+      switch (viewType) {
+        case "table":
+          return (
+            <Profiler id="table" onRender={handleProfile}>
+              <Table />
+            </Profiler>
+          );
+        case "grouped table":
+          return (
+            <Profiler id="grouped table" onRender={handleProfile}>
+              <GroupedTable />
+            </Profiler>
+          );
+        case "tiles":
+          return (
+            <Profiler id="tiles" onRender={handleProfile}>
+              <Tiles />
+            </Profiler>
+          );
+        default:
+          return null;
+      }
     }
     return null;
   };
