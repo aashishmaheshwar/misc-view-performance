@@ -10,8 +10,9 @@ export const useFetch = (url = BASE_URL, options = undefined) => {
     
     useEffect(() => {
       const fetchData = async () => {
-        setIsLoading(true);
         const startTime = Date.now();
+        
+        setIsLoading(true);
         try {
           const res = await fetch(url, options);
           const json = await res.json();
@@ -20,8 +21,10 @@ export const useFetch = (url = BASE_URL, options = undefined) => {
           setIsLoading(false)
         } catch (error) {
           setError(error);
+          setIsLoading(false);
         }
       };
+
       fetchData();
     }, [url, options]);
     
