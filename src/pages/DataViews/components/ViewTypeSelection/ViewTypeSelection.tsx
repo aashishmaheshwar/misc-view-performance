@@ -17,18 +17,21 @@ const ViewTypeSelection = ({ viewType, onChange }: Props) => {
       <Button
         variant={viewType === "table" ? "solid" : "outline"}
         onClick={handleChange("table")}
+        colorScheme="blue"
       >
         Table
       </Button>
       <Button
         variant={viewType === "grouped table" ? "solid" : "outline"}
         onClick={handleChange("grouped table")}
+        colorScheme="blue"
       >
         Grouped Table
       </Button>
       <Button
         variant={viewType === "tiles" ? "solid" : "outline"}
         onClick={handleChange("tiles")}
+        colorScheme="blue"
       >
         Tiles
       </Button>
