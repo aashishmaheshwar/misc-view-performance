@@ -12,15 +12,17 @@ import {
 import { useFetch } from "hooks";
 import { Comment } from "pages/DataViews";
 import { tableStyles } from "./TableSyles";
+import { useDispatch } from "react-redux";
 
 const Table = () => {
   const { response, error, isLoading, fetchDuration } = useFetch();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     if (fetchDuration) {
-      console.log(fetchDuration);
+      dispatch({ type: "EMIT_FETCH_DURATION", payload: fetchDuration });
     }
-  }, [fetchDuration]);
+  }, [fetchDuration, dispatch]);
 
   if (isLoading) {
     return <>Fetching table data"</>;
@@ -53,8 +55,12 @@ const Table = () => {
           <Tbody>
             {((response || []) as Array<Comment>).map((item) => (
               <Tr key={item.id}>
-                {["id", "postId", "name", "email", "body"].map((property) => (
-                  <Td key={property}>{item[property as keyof Comment]}</Td>
+                {(
+                  ["id", "postId", "name", "email", "body"] as Array<
+                    keyof Comment
+                  >
+                ).map((property) => (
+                  <Td key={property}>{item[property]}</Td>
                 ))}
               </Tr>
             ))}
