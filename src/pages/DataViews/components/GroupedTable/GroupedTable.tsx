@@ -9,8 +9,7 @@ import {
   Th,
   Td,
 } from "@chakra-ui/react";
-import { useFetch } from "hooks";
-import { useUtilityFns } from "hooks/useUtilityFns";
+import { useFetch, useUtilityFns } from "hooks";
 import { Comment } from "pages/DataViews/DataViews";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
@@ -27,7 +26,6 @@ const GroupedTable = () => {
   useEffect(() => {
     if (response) {
       setData(groupByPostId(response as any));
-      console.log(groupByPostId(response as any));
     }
   }, [response, groupByPostId]);
 

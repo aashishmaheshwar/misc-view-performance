@@ -12,7 +12,7 @@ import GroupedTable from "./components/GroupedTable";
 import Tiles from "./components/Tiles";
 import { useSelector } from "react-redux";
 import { nanoid } from "nanoid";
-import { useMeasurementsInLocalStorage } from "hooks/useMeasurementsInLocalStorage";
+import { useMeasurementsInLocalStorage } from "hooks";
 
 export type ViewType = "table" | "grouped table" | "tiles";
 export interface Comment {

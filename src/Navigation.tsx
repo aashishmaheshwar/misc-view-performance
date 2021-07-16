@@ -10,7 +10,7 @@ const Navigation = () => {
         <Heading alignSelf="center" fontWeight="extrabold" size="lg">
           Data View Profiler
         </Heading>
-        <HStack pl="4">
+        <HStack pl="4" marginLeft="auto">
           <Link as={NavLink} to="/home">
             Home
           </Link>
@@ -21,7 +21,7 @@ const Navigation = () => {
             Measurements
           </Link>
         </HStack>
-        <ColorModeSwitcher marginLeft="auto" />
+        <ColorModeSwitcher alignSelf="center" />
       </Flex>
     </Box>
   );
