@@ -49,11 +49,8 @@ const DataViews = () => {
 
   useEffect(() => {
     if (fetchDuration && measurement) {
-      console.log("fetch duration is ", fetchDuration);
-      console.log("measurements are ", measurement);
       addMeasurement({ ...measurement, fetchDuration });
-      // persisist to measurements array in localStorage
-      setMeasurement(null); // last
+      setMeasurement(null);
     }
   }, [fetchDuration, measurement, addMeasurement]);
 
