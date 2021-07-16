@@ -39,7 +39,7 @@ const Table = () => {
       </Heading>
       <Box overflowX="auto" w="95vw" css={tableStyles()}>
         <ChakraTable
-          arai-label="Comments from Placeholder API"
+          aria-label="Comments from Placeholder API"
           colorScheme="gray"
           variant="striped"
         >
