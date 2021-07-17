@@ -1,25 +1,15 @@
 import React, { useEffect, useState } from "react";
-import {
-  Box,
-  Heading,
-  useMediaQuery,
-  Text,
-  VStack,
-  Flex,
-  Grid,
-} from "@chakra-ui/react";
+import { Box, Heading, Flex } from "@chakra-ui/react";
 import { useFetch, useUtilityFns } from "hooks";
-import { Comment } from "pages/DataViews";
 import { useDispatch } from "react-redux";
 import { GroupedDataType } from "../GroupedTable/GroupedTable";
-import Tile from "./components/Tile/Tile";
+import { Tile } from "./components/Tile";
 
 const Tiles = () => {
   const { response, error, isLoading, fetchDuration } = useFetch();
   const dispatch = useDispatch();
   const [data, setData] = useState<GroupedDataType>([]);
   const { groupByPostId } = useUtilityFns();
-  const [isLargerThan900] = useMediaQuery("(min-width: 900px)");
 
   useEffect(() => {
     if (response) {
@@ -34,11 +24,11 @@ const Tiles = () => {
   }, [fetchDuration, dispatch]);
 
   if (isLoading) {
-    return <>Fetching table data"</>;
+    return <>Fetching tile data"</>;
   }
 
   if (error) {
-    return <>Unable to fetch data</>;
+    return <>Unable to fetch tile data</>;
   }
 
   return (
@@ -47,9 +37,6 @@ const Tiles = () => {
         Comments Tiles from Placeholder API
       </Heading>
       <Box overflowX="auto" w="95vw">
-        <Text>
-          {isLargerThan900 ? "larger than 900px" : "smaller than 900px"}
-        </Text>
         {data.map(({ postId, comments }) => (
           <Box key={postId} flexDirection="column" justifyContent="center">
             <Heading size="sm" mt="8" mb="8">

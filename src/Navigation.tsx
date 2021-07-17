@@ -1,7 +1,6 @@
 import { Box, Flex, Heading, HStack, Link } from "@chakra-ui/react";
 import React from "react";
 import { NavLink } from "react-router-dom";
-import { ColorModeSwitcher } from "./ColorModeSwitcher";
 
 const Navigation = () => {
   return (
@@ -21,7 +20,6 @@ const Navigation = () => {
             Measurements
           </Link>
         </HStack>
-        <ColorModeSwitcher alignSelf="center" />
       </Flex>
     </Box>
   );
