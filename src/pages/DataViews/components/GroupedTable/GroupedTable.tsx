@@ -1,11 +1,9 @@
 import { Heading, VStack } from "@chakra-ui/react";
 import { useFetch, useUtilityFns } from "hooks";
-import { Comment } from "pages/DataViews/DataViews";
+import { GroupedDataType } from "types";
 import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ResponsiveTable } from "reusable_components";
-
-export type GroupedDataType = Array<{ postId: string; comments: Comment[] }>;
 
 const ColumnInfo = [
   { key: "id", label: "Id" },

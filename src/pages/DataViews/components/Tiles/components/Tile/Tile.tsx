@@ -1,7 +1,6 @@
 import { Heading, VStack, Text } from "@chakra-ui/react";
 import React from "react";
 import { tileStyles } from "./TileStyles";
-
 interface TitleProps {
   name: string;
   body: string;

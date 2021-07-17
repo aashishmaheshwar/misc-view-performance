@@ -13,28 +13,7 @@ import Tiles from "./components/Tiles";
 import { useSelector } from "react-redux";
 import { nanoid } from "nanoid";
 import { useMeasurementsInLocalStorage } from "hooks";
-
-export type ViewType = "table" | "grouped table" | "tiles";
-export interface Comment {
-  id: number;
-  postId: number;
-  name: string;
-  email: string;
-  body: string;
-}
-
-export interface Measurement {
-  id: string;
-  type: ViewType;
-  phase: "mount" | "update";
-  actualDuration: number;
-  baseDuration: number;
-  startTime: number;
-  commitTime: number;
-  interactions: Set<any>;
-  fetchDuration?: number;
-  createdAt?: number;
-}
+import { ViewType, Measurement } from "types";
 
 const DataViews = () => {
   const [viewType, setViewType] = useState<ViewType>("table");

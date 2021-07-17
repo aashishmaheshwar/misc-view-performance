@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import { Box, Heading, Flex } from "@chakra-ui/react";
 import { useFetch, useUtilityFns } from "hooks";
 import { useDispatch } from "react-redux";
-import { GroupedDataType } from "../GroupedTable/GroupedTable";
+import { GroupedDataType } from "types";
 import { Tile } from "./components/Tile";
 
 const Tiles = () => {
