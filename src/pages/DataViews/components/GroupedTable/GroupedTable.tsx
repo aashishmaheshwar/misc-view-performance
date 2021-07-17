@@ -15,7 +15,7 @@ import React, { useEffect, useState } from "react";
 import { useDispatch } from "react-redux";
 import { tableStyles } from "../Table/TableSyles";
 
-type GroupedDataType = Array<{ postId: string; comments: Comment[] }>;
+export type GroupedDataType = Array<{ postId: string; comments: Comment[] }>;
 
 const GroupedTable = () => {
   const { response, error, isLoading, fetchDuration } = useFetch();
