@@ -14,6 +14,14 @@ import { Comment } from "pages/DataViews";
 import { tableStyles } from "./TableSyles";
 import { useDispatch } from "react-redux";
 
+const ColumnInfo = [
+  { key: "id", label: "Id" },
+  { key: "postId", label: "Post Id" },
+  { key: "name", label: "Name" },
+  { key: "email", label: "Email" },
+  { key: "body", label: "Body" },
+] as const;
+
 const Table = () => {
   const { response, error, isLoading, fetchDuration } = useFetch();
   const dispatch = useDispatch();
@@ -42,26 +50,25 @@ const Table = () => {
           aria-label="Comments from Placeholder API"
           colorScheme="gray"
           variant="striped"
+          className="table"
         >
           <Thead>
             <Tr>
-              <Th>Id</Th>
-              <Th>Post Id</Th>
-              <Th>Name</Th>
-              <Th>Email</Th>
-              <Th>Body</Th>
+              {ColumnInfo.map(({ label }) => (
+                <Th key={label}>{label}</Th>
+              ))}
             </Tr>
           </Thead>
           <Tbody>
             {((response || []) as Array<Comment>).map((item) => (
               <Tr key={item.id}>
-                {(
-                  ["id", "postId", "name", "email", "body"] as Array<
-                    keyof Comment
-                  >
-                ).map((property) => (
-                  <Td key={property}>{item[property]}</Td>
-                ))}
+                {(ColumnInfo.map(({ key }) => key) as Array<keyof Comment>).map(
+                  (property, index) => (
+                    <Td key={property} data-label={ColumnInfo[index].label}>
+                      {item[property]}
+                    </Td>
+                  )
+                )}
               </Tr>
             ))}
           </Tbody>
