@@ -2,6 +2,8 @@ export type ViewType = "table" | "grouped table" | "tiles";
 
 export type GroupedDataType = Array<{ postId: string; comments: Comment[] }>;
 
+export type MeasurementViewType = "table" | "tiles";
+
 export interface Comment {
   id: number;
   postId: number;
