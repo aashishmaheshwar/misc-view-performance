@@ -93,6 +93,7 @@ const Tiles = ({ data: propData }: TileProps) => {
             isChecked={selected}
             marginLeft="auto"
             onChange={handleSelect(measurement)}
+            title="select"
           />
         </HStack>
         {measurementInfo.map(({ key, label }) => (

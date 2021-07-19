@@ -1,8 +1,22 @@
-import { Box, Heading, Flex, Button, HStack } from "@chakra-ui/react";
+import {
+  Box,
+  Heading,
+  Flex,
+  Button,
+  HStack,
+  useDisclosure,
+  Modal,
+  ModalBody,
+  ModalCloseButton,
+  ModalContent,
+  ModalHeader,
+  ModalOverlay,
+} from "@chakra-ui/react";
 import { useMeasurementsInLocalStorage } from "hooks";
 import React, { useState } from "react";
 import { useDispatch } from "react-redux";
 import { MeasurementViewType } from "types";
+import Aggregation from "./components/Aggregation";
 import Table from "./components/Table";
 import Tiles from "./components/Tiles";
 import { measurementsContainerStyles } from "./MeasurementStyles";
@@ -11,6 +25,11 @@ const Measurements = () => {
   const { measurements } = useMeasurementsInLocalStorage();
   const [viewType, setViewType] = useState<MeasurementViewType>("table");
   const dispatch = useDispatch();
+  const {
+    isOpen: isAggregateOpen,
+    onOpen: onAggregateOpen,
+    onClose: onAggregateClose,
+  } = useDisclosure();
 
   const handleViewTypeChange = (type: MeasurementViewType) => () => {
     setViewType(type);
@@ -23,6 +42,23 @@ const Measurements = () => {
       dispatch({ type: "ASSIGN_MEASUREMENTS", payload: [] });
     }
   };
+
+  const buildAggregateModal = () => (
+    <Modal
+      blockScrollOnMount={false}
+      isOpen={isAggregateOpen}
+      onClose={onAggregateClose}
+    >
+      <ModalOverlay />
+      <ModalContent>
+        <ModalHeader>Aggregate of selected measurements</ModalHeader>
+        <ModalCloseButton />
+        <ModalBody>
+          <Aggregation />
+        </ModalBody>
+      </ModalContent>
+    </Modal>
+  );
 
   const buildViewContainer = () => {
     switch (viewType) {
@@ -45,7 +81,7 @@ const Measurements = () => {
       </Button>
       <Button
         variant="outline"
-        onClick={handleViewTypeChange("tiles")}
+        onClick={onAggregateOpen}
         colorScheme="blue"
         title="aggregate measurements of selected"
       >
@@ -87,6 +123,7 @@ const Measurements = () => {
       </Flex>
       {buildViewContainer()}
       {buildActionBtnContainer()}
+      {buildAggregateModal()}
     </Box>
   );
 };
