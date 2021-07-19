@@ -1,8 +1,16 @@
-import { Flex, Heading, HStack, Text, VStack } from "@chakra-ui/react";
+import {
+  Checkbox,
+  Flex,
+  Heading,
+  HStack,
+  Text,
+  VStack,
+} from "@chakra-ui/react";
 import { tileStyles } from "pages/DataViews/components/Tiles/components/Tile/TileStyles";
-import React, { useMemo } from "react";
+import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { Measurement } from "types";
 import { format } from "date-fns";
+import { useDispatch, useSelector } from "react-redux";
 
 interface TileProps {
   data: Array<Measurement>;
@@ -19,14 +27,74 @@ const MeasurementInfo: Array<{ label: string; key: string }> = [
   { label: "Fetch Duration", key: "fetchDuration" },
 ];
 
-const Tiles = ({ data }: TileProps) => {
-  const measurementInfo = useMemo(() => MeasurementInfo, []);
+interface MeasurementWithSelectedState extends Measurement {
+  selected?: boolean;
+}
 
-  const buildTile = (measurement: Measurement) => {
-    const { id } = measurement;
+const Tiles = ({ data: propData }: TileProps) => {
+  const measurementInfo = useMemo(() => MeasurementInfo, []);
+  const selectedMeasurements: Array<Measurement> = useSelector(
+    (state) => (state as any).selectedMeasurements
+  );
+  const [data, setData] = useState<Array<MeasurementWithSelectedState>>([]);
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    const selectedMeasurementsIdSet = new Set(
+      selectedMeasurements.map(({ id }) => id)
+    );
+    const newData: Array<MeasurementWithSelectedState> = propData.reduce(
+      (acc, item) => {
+        const newItem: MeasurementWithSelectedState = { ...item };
+
+        if (selectedMeasurementsIdSet.has(item.id)) {
+          newItem.selected = true;
+        } else {
+          newItem.selected = false;
+        }
+
+        acc.push(newItem);
+        return acc;
+      },
+      [] as Array<MeasurementWithSelectedState>
+    );
+
+    setData(newData);
+  }, [propData, selectedMeasurements]);
+
+  const handleSelect =
+    (measurement: MeasurementWithSelectedState) =>
+    (event: ChangeEvent<HTMLInputElement>) => {
+      const { checked } = event.target;
+      const { selected, ...measurementWithoutSelectedFlag } = measurement;
+
+      if (checked) {
+        dispatch({
+          type: "ADD_MEASUREMENT",
+          payload: measurementWithoutSelectedFlag,
+        });
+      } else {
+        dispatch({
+          type: "REMOVE_MEASUREMENT",
+          payload: measurementWithoutSelectedFlag,
+        });
+      }
+    };
+
+  const buildTile = (measurement: MeasurementWithSelectedState) => {
+    const { id, selected } = measurement;
 
     return (
       <VStack css={tileStyles()} key={id}>
+        <HStack spacing={5} w="100%">
+          <Checkbox
+            size="lg"
+            colorScheme="orange"
+            isChecked={selected}
+            marginLeft="auto"
+            onChange={handleSelect(measurement)}
+          />
+        </HStack>
         {measurementInfo.map(({ key, label }) => (
           <HStack key={label} w="100%">
             <Heading size="xs" mt="2" mb="2" alignSelf="flex-start">
