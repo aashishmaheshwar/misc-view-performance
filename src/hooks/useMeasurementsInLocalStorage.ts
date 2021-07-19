@@ -39,6 +39,19 @@ export const useMeasurementsInLocalStorage = () => {
         }
     };
 
-    return {measurements, addMeasurement, removeMeasurement};
+    const removeMeasurements = (measurementsToRemove: Array<Measurement>) => {
+      try {
+          const measurementsToRemoveIdsSet = new Set(measurementsToRemove.map(({id}) => id));
+          const updatedMeasurements = measurements.filter(({id}) => !measurementsToRemoveIdsSet.has(id));
+
+          setMeasurements([...updatedMeasurements]);
+          if (updatedMeasurements.length)
+              window.localStorage.setItem('measurements', JSON.stringify([...updatedMeasurements]));
+      } catch (error) {
+          console.log(error);
+      }
+  };
+
+    return {measurements, addMeasurement, removeMeasurement, removeMeasurements};
   }
   

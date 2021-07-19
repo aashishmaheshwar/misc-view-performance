@@ -11,18 +11,25 @@ import {
   ModalContent,
   ModalHeader,
   ModalOverlay,
+  AlertDialog,
+  AlertDialogBody,
+  AlertDialogContent,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogOverlay,
+  useToast,
 } from "@chakra-ui/react";
 import { useMeasurementsInLocalStorage } from "hooks";
-import React, { useState } from "react";
-import { useDispatch } from "react-redux";
-import { MeasurementViewType } from "types";
+import React, { useRef, useState } from "react";
+import { useDispatch, useSelector } from "react-redux";
+import { Measurement, MeasurementViewType } from "types";
 import Aggregation from "./components/Aggregation";
 import Table from "./components/Table";
 import Tiles from "./components/Tiles";
 import { measurementsContainerStyles } from "./MeasurementStyles";
 
 const Measurements = () => {
-  const { measurements } = useMeasurementsInLocalStorage();
+  const { measurements, removeMeasurements } = useMeasurementsInLocalStorage();
   const [viewType, setViewType] = useState<MeasurementViewType>("table");
   const dispatch = useDispatch();
   const {
@@ -30,6 +37,14 @@ const Measurements = () => {
     onOpen: onAggregateOpen,
     onClose: onAggregateClose,
   } = useDisclosure();
+  const selectedMeasurements: Array<Measurement> = useSelector(
+    (state) => (state as any).selectedMeasurements
+  );
+  const [isDeleteConfirmOpen, setIsDeleteConfirmOpen] = useState(false);
+  const cancelRef = useRef();
+  const toast = useToast();
+
+  const onDeleteConfirmClose = () => setIsDeleteConfirmOpen(false);
 
   const handleViewTypeChange = (type: MeasurementViewType) => () => {
     setViewType(type);
@@ -42,6 +57,51 @@ const Measurements = () => {
       dispatch({ type: "ASSIGN_MEASUREMENTS", payload: [] });
     }
   };
+
+  const handleDelete = () => {
+    removeMeasurements(selectedMeasurements);
+    onDeleteConfirmClose();
+    toast({
+      title: "Deleted",
+      description: "Selected Measurements have been deleted successfully",
+      status: "success",
+      duration: 5000,
+      isClosable: true,
+    });
+  };
+
+  const handleDeleteConfirmationOpen = () => {
+    setIsDeleteConfirmOpen(true);
+  };
+
+  const buildDeleteConfirmationModal = () => (
+    <AlertDialog
+      isOpen={isDeleteConfirmOpen}
+      leastDestructiveRef={cancelRef as any}
+      onClose={onDeleteConfirmClose}
+    >
+      <AlertDialogOverlay>
+        <AlertDialogContent>
+          <AlertDialogHeader fontSize="lg" fontWeight="bold">
+            Delete Selected Measurements
+          </AlertDialogHeader>
+
+          <AlertDialogBody>
+            Are you sure? You can't undo this action afterwards.
+          </AlertDialogBody>
+
+          <AlertDialogFooter>
+            <Button ref={cancelRef as any} onClick={onDeleteConfirmClose}>
+              Cancel
+            </Button>
+            <Button colorScheme="red" onClick={handleDelete} ml={3}>
+              Delete
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialogOverlay>
+    </AlertDialog>
+  );
 
   const buildAggregateModal = () => (
     <Modal
@@ -84,14 +144,16 @@ const Measurements = () => {
         onClick={onAggregateOpen}
         colorScheme="blue"
         title="aggregate measurements of selected"
+        disabled={!selectedMeasurements.length}
       >
         Aggregate
       </Button>
       <Button
         variant="outline"
-        onClick={handleViewTypeChange("tiles")}
+        onClick={handleDeleteConfirmationOpen}
         colorScheme="blue"
         title="delete selected"
+        disabled={!selectedMeasurements.length}
       >
         Delete
       </Button>
@@ -124,6 +186,7 @@ const Measurements = () => {
       {buildViewContainer()}
       {buildActionBtnContainer()}
       {buildAggregateModal()}
+      {buildDeleteConfirmationModal()}
     </Box>
   );
 };
