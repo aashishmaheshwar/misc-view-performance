@@ -33,7 +33,12 @@ const Tiles = ({ data }: TileProps) => {
               {label}
             </Heading>
             <Text textAlign="right" flex="1">
-              {measurement[key as keyof Measurement]}
+              {key === "createdAt"
+                ? format(
+                    measurement[key as keyof Measurement] as number,
+                    "dd-MMM-yyyy hh:mm:ss"
+                  )
+                : measurement[key as keyof Measurement]}
             </Text>
           </HStack>
         ))}

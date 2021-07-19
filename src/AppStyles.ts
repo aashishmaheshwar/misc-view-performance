@@ -1,11 +1,11 @@
 import { css } from '@emotion/react';
 
 export const appStyles = () => css`
-    /** scroll bar **/
-    
+      /** scroll bar **/
       *::-webkit-scrollbar {
         width: 10px;
       }
+
       /* Track */
       *::-webkit-scrollbar-track {
         background: #f1f1f1;
@@ -17,7 +17,7 @@ export const appStyles = () => css`
       *::-webkit-scrollbar-thumb {
         background: #888;
         border-radius: 100px;
-        height: 100px;
+        min-height: 50px;
       }
       
       /* Handle on hover */

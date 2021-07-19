@@ -1,4 +1,4 @@
-import { Measurement } from "pages/DataViews/DataViews";
+import { Measurement } from "types";
 import { useState } from "react";
 
 export const useMeasurementsInLocalStorage = () => {

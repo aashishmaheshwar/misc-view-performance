@@ -1,4 +1,10 @@
-const performanceReducer = (state = {}, action: { type: string; payload: any }) => {
+import { isEqual, filter } from "lodash";
+
+const InitialState = {
+  selectedMeasurements: []
+};
+
+const performanceReducer = (state = InitialState, action: { type: string; payload: any }) => {
     switch (action.type) {
       case "EMIT_FETCH_DURATION": {
         return {
@@ -6,8 +12,24 @@ const performanceReducer = (state = {}, action: { type: string; payload: any }) 
           fetchDuration: action.payload,
         };
       }
-      case "CLEAR_MEASUREMENT": {
-        return {};
+      case "ASSIGN_MEASUREMENTS": {
+        return {
+          ...state,
+          selectedMeasurements: action.payload
+        };
+      }
+      case "ADD_MEASUREMENT": {
+          return {
+            ...state,
+            selectedMeasurements: [...state.selectedMeasurements, action.payload]
+          };
+      }
+      case "REMOVE_MEASUREMENT": {
+        return {
+          ...state,
+          selectedMeasurements: filter(state.selectedMeasurements, 
+            (measurement => !isEqual(action.payload, measurement)))
+        };
       }
       default:
         return state;

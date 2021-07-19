@@ -25,6 +25,41 @@ const Measurements = () => {
     }
   };
 
+  const buildActionBtnContainer = () => (
+    <HStack justifyContent="flex-end" pt="3">
+      <Button
+        variant="outline"
+        onClick={handleViewTypeChange("table")}
+        colorScheme="blue"
+      >
+        Select All
+      </Button>
+      <Button
+        variant="outline"
+        onClick={handleViewTypeChange("table")}
+        colorScheme="blue"
+      >
+        Un-Select All
+      </Button>
+      <Button
+        variant="outline"
+        onClick={handleViewTypeChange("tiles")}
+        colorScheme="blue"
+        title="aggregate measurements of selected"
+      >
+        Aggregate
+      </Button>
+      <Button
+        variant="outline"
+        onClick={handleViewTypeChange("tiles")}
+        colorScheme="blue"
+        title="delete selected"
+      >
+        Delete
+      </Button>
+    </HStack>
+  );
+
   return (
     <Box css={measurementsContainerStyles()}>
       <Heading alignSelf="center" fontWeight="extrabold" size="lg">
@@ -49,7 +84,7 @@ const Measurements = () => {
         </HStack>
       </Flex>
       {buildViewContainer()}
-      {/* container for select all, aggregate, delete etc buttons. Will be same for multiple views */}
+      {buildActionBtnContainer()}
     </Box>
   );
 };
