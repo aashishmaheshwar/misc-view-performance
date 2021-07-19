@@ -1,5 +1,5 @@
 import { Heading, VStack, Text } from "@chakra-ui/react";
-import React from "react";
+import React, { memo } from "react";
 import { tileStyles } from "./TileStyles";
 interface TitleProps {
   name: string;
@@ -29,4 +29,4 @@ const Tile = ({ name, body, email }: TitleProps) => {
   );
 };
 
-export default Tile;
+export default memo(Tile);

@@ -9,6 +9,8 @@ import {
 import { BrowserRouter, Redirect, Route, Switch } from "react-router-dom";
 import Home from "./pages/Home";
 import Navigation from "./Navigation";
+import { Global } from "@emotion/react";
+import { appStyles } from "AppStyles";
 
 const DataViews = React.lazy(() => import("./pages/DataViews"));
 const Measurements = React.lazy(() => import("./pages/Measurements"));
@@ -19,13 +21,19 @@ export const App = () => {
   return (
     <ChakraProvider theme={theme}>
       <BrowserRouter>
+        <Global styles={appStyles()} />
         <Navigation />
         <Box
           textAlign="center"
           fontSize="xl"
           mt={isLessThan500px ? "150px" : "120px"}
         >
-          <Grid minH="100vh" p={3}>
+          <Grid
+            minH={
+              isLessThan500px ? "calc(100vh - 150px)" : "calc(100vh - 120px)"
+            }
+            p={3}
+          >
             <Suspense fallback={<span>Loading...</span>}>
               <Switch>
                 <Route path="/home" exact component={Home} />
