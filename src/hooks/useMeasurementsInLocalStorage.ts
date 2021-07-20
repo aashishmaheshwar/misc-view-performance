@@ -34,6 +34,8 @@ export const useMeasurementsInLocalStorage = () => {
             setMeasurements([...updatedMeasurements]);
             if (updatedMeasurements.length)
                 window.localStorage.setItem('measurements', JSON.stringify([...updatedMeasurements]));
+            else 
+                window.localStorage.removeItem('measurements');    
         } catch (error) {
             console.log(error);
         }
@@ -47,6 +49,8 @@ export const useMeasurementsInLocalStorage = () => {
           setMeasurements([...updatedMeasurements]);
           if (updatedMeasurements.length)
               window.localStorage.setItem('measurements', JSON.stringify([...updatedMeasurements]));
+          else 
+              window.localStorage.removeItem('measurements');
       } catch (error) {
           console.log(error);
       }

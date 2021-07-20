@@ -66,35 +66,33 @@ const Tiles = ({ data: propData }: TileProps) => {
   }, [propData, selectedMeasurements]);
 
   const handleSelect =
-    (measurement: MeasurementWithSelectedState) =>
-    (event: ChangeEvent<HTMLInputElement>) => {
+    (tileIndex: number) => (event: ChangeEvent<HTMLInputElement>) => {
       const { checked } = event.target;
-      const { selected, ...measurementWithoutSelectedFlag } = measurement;
 
       if (checked) {
         dispatch({
           type: "ADD_MEASUREMENT",
-          payload: measurementWithoutSelectedFlag,
+          payload: propData[tileIndex],
         });
       } else {
         dispatch({
           type: "REMOVE_MEASUREMENT",
-          payload: measurementWithoutSelectedFlag,
+          payload: propData[tileIndex],
         });
       }
     };
 
-  const routeToMeasurementDetail =
-    (measurementWithSelection: MeasurementWithSelectedState) => () => {
-      const { selected, ...measurement } = measurementWithSelection;
+  const routeToMeasurementDetail = (tileIndex: number) => () => {
+    history.push({
+      pathname: `/measurement/${propData[tileIndex].id}`,
+      state: propData[tileIndex],
+    });
+  };
 
-      history.push({
-        pathname: `/measurement/${measurement.id}`,
-        state: measurement,
-      });
-    };
-
-  const buildTile = (measurement: MeasurementWithSelectedState) => {
+  const buildTile = (
+    measurement: MeasurementWithSelectedState,
+    tileIndex: number
+  ) => {
     const { id, selected } = measurement;
 
     return (
@@ -103,7 +101,7 @@ const Tiles = ({ data: propData }: TileProps) => {
           <Button
             variant="outline"
             marginRight="auto"
-            onClick={routeToMeasurementDetail(measurement)}
+            onClick={routeToMeasurementDetail(tileIndex)}
             colorScheme="blue"
             aria-label={`View measurement : ${id}`}
           >
@@ -116,7 +114,7 @@ const Tiles = ({ data: propData }: TileProps) => {
             aria-checked={selected}
             aria-labelledby={`Select measurement : ${id}`}
             marginLeft="auto"
-            onChange={handleSelect(measurement)}
+            onChange={handleSelect(tileIndex)}
             title="select"
           />
         </HStack>
@@ -145,7 +143,7 @@ const Tiles = ({ data: propData }: TileProps) => {
       justifyContent="center"
       className="measurements-detail-container"
     >
-      {data.map((tile) => buildTile(tile))}
+      {data.map((tile, index) => buildTile(tile, index))}
     </Flex>
   );
 };
