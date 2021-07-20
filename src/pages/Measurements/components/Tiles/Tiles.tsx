@@ -1,4 +1,5 @@
 import {
+  Button,
   Checkbox,
   Flex,
   Heading,
@@ -11,6 +12,7 @@ import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
 import { Measurement } from "types";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
+import { useHistory } from "react-router-dom";
 
 interface TileProps {
   data: Array<Measurement>;
@@ -38,6 +40,7 @@ const Tiles = ({ data: propData }: TileProps) => {
   );
   const [data, setData] = useState<Array<MeasurementWithSelectedState>>([]);
   const dispatch = useDispatch();
+  let history = useHistory();
 
   useEffect(() => {
     const selectedMeasurementsIdSet = new Set(
@@ -81,16 +84,37 @@ const Tiles = ({ data: propData }: TileProps) => {
       }
     };
 
+  const routeToMeasurementDetail =
+    (measurementWithSelection: MeasurementWithSelectedState) => () => {
+      const { selected, ...measurement } = measurementWithSelection;
+
+      history.push({
+        pathname: `/measurement/${measurement.id}`,
+        state: measurement,
+      });
+    };
+
   const buildTile = (measurement: MeasurementWithSelectedState) => {
     const { id, selected } = measurement;
 
     return (
       <VStack css={tileStyles()} key={id}>
         <HStack spacing={5} w="100%">
+          <Button
+            variant="outline"
+            marginRight="auto"
+            onClick={routeToMeasurementDetail(measurement)}
+            colorScheme="blue"
+            aria-label={`View measurement : ${id}`}
+          >
+            View
+          </Button>
           <Checkbox
             size="lg"
             colorScheme="orange"
             isChecked={selected}
+            aria-checked={selected}
+            aria-labelledby={`Select measurement : ${id}`}
             marginLeft="auto"
             onChange={handleSelect(measurement)}
             title="select"

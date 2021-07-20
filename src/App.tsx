@@ -14,6 +14,7 @@ import { appStyles } from "AppStyles";
 
 const DataViews = React.lazy(() => import("./pages/DataViews"));
 const Measurements = React.lazy(() => import("./pages/Measurements"));
+const MeasurementDetail = React.lazy(() => import("./pages/MeasurementDetail"));
 
 export const App = () => {
   const [isLessThan500px] = useMediaQuery("(max-width: 500px)");
@@ -39,6 +40,11 @@ export const App = () => {
                 <Route path="/home" exact component={Home} />
                 <Route path="/dataViews" exact component={DataViews} />
                 <Route path="/measurements" exact component={Measurements} />
+                <Route
+                  path="/measurement/:id"
+                  exact
+                  component={MeasurementDetail}
+                />
                 <Route path="**" exact>
                   <Redirect to="/home" />
                 </Route>
