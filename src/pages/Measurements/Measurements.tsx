@@ -171,6 +171,7 @@ const Measurements = () => {
             variant={viewType === "table" ? "solid" : "outline"}
             onClick={handleViewTypeChange("table")}
             colorScheme="blue"
+            data-selected={viewType === "table"}
           >
             Table
           </Button>
@@ -178,6 +179,7 @@ const Measurements = () => {
             variant={viewType === "tiles" ? "solid" : "outline"}
             onClick={handleViewTypeChange("tiles")}
             colorScheme="blue"
+            data-selected={viewType === "tiles"}
           >
             Tiles
           </Button>

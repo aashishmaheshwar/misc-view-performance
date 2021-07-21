@@ -6,6 +6,9 @@ import * as useMeasurementsHooks from "hooks/useMeasurementsInLocalStorage";
 import { createMemoryHistory } from "history";
 import { getRender } from "test-utils";
 
+// Tiles component mocked
+jest.mock("../components/Tiles", () => () => "");
+
 const SampleMeasurements = [
   {
     id: "B7hPaMO5n7b7WUi0ZI2-y",
@@ -37,6 +40,7 @@ describe("Measurements", () => {
   let routeComponentPropsMock: any;
   let dispathMock: any;
   let addMeasurementsMock: any;
+  let removeMeasurementsMock: any;
   let render;
 
   beforeEach(() => {
@@ -46,6 +50,7 @@ describe("Measurements", () => {
       match: {} as any,
     };
     addMeasurementsMock = jest.fn();
+    removeMeasurementsMock = jest.fn();
     dispathMock = jest.fn();
     jest.spyOn(hooks, "useDispatch").mockReturnValue(dispathMock);
     jest
@@ -55,6 +60,7 @@ describe("Measurements", () => {
           ({
             measurements: Measurements,
             addMeasurements: addMeasurementsMock,
+            removeMeasurements: removeMeasurementsMock,
           } as any)
       );
     render = getRender({
@@ -97,15 +103,85 @@ describe("Measurements", () => {
 
   describe(`delete`, () => {
     let deleteBtn;
-    beforeEach(() => {
+    let deletePopupTitle: any;
+    beforeEach(async () => {
       deleteBtn = screen.getByText("Delete");
       fireEvent.click(deleteBtn);
+      deletePopupTitle = await screen.findByText(
+        "Delete Selected Measurements"
+      );
     });
 
-    it(`clicking delete opens the confirmation popup`, async () => {});
+    it(`clicking delete opens the confirmation popup`, () => {
+      expect(deletePopupTitle).toBeInTheDocument();
+    });
 
-    it(`clicking 'Cancel' on confirmation popup, closes it without deleting the selected measurements`, async () => {});
+    it(`clicking 'Cancel' on confirmation popup, 
+    closes it without deleting the selected measurements`, () => {
+      const cancelBtn = screen.getByText("Cancel");
+      fireEvent.click(cancelBtn);
+      expect(removeMeasurementsMock).not.toHaveBeenCalled();
+    });
 
-    it(`clicking 'Delete' on confirmation popup, calls 'removeMeasurements' with selected measurements`, async () => {});
+    it(`clicking 'Delete' on confirmation popup,
+     calls 'removeMeasurements' with selected measurements`, async () => {
+      const deleteBtn = screen.getByRole("button", { name: "Delete" });
+      fireEvent.click(deleteBtn);
+      expect(removeMeasurementsMock).toHaveBeenCalledWith(
+        expect.objectContaining({
+          length: 1,
+        })
+      );
+      const toastMsg = await screen.findByText(
+        "Selected Measurements have been deleted successfully"
+      );
+      expect(toastMsg).toBeInTheDocument();
+    });
+  });
+
+  describe("aggregate", () => {
+    it(`clicking on Aggregate button opens the aggregated values of selected measurements`, async () => {
+      const aggregateBtn = screen.getByRole("button", {
+        name: "aggregate measurements of selected",
+      });
+      fireEvent.click(aggregateBtn);
+      const aggregateTitleMsg = await screen.findByText(
+        "Aggregate of selected measurements"
+      );
+      expect(aggregateTitleMsg).toBeInTheDocument();
+    });
+  });
+
+  describe("view type", () => {
+    it(`renders the table view by default`, () => {
+      expect(
+        JSON.parse(
+          screen.getByRole("button", { name: "Table" }).dataset
+            .selected as string
+        )
+      ).toBeTruthy();
+      expect(
+        JSON.parse(
+          screen.getByRole("button", { name: "Tiles" }).dataset
+            .selected as string
+        )
+      ).toBeFalsy();
+    });
+
+    it(`clicking on Tiles changes to the tile view`, () => {
+      fireEvent.click(screen.getByRole("button", { name: "Tiles" }));
+      expect(
+        JSON.parse(
+          screen.getByRole("button", { name: "Table" }).dataset
+            .selected as string
+        )
+      ).toBeFalsy();
+      expect(
+        JSON.parse(
+          screen.getByRole("button", { name: "Tiles" }).dataset
+            .selected as string
+        )
+      ).toBeTruthy();
+    });
   });
 });
