@@ -3,7 +3,6 @@ import React, {
   Profiler,
   ProfilerOnRenderCallback,
   useEffect,
-  useRef,
 } from "react";
 import {
   Heading,
@@ -41,20 +40,19 @@ const DataViews = () => {
     onClose: onLoadingClose,
   } = useDisclosure();
   const toast = useToast();
-  const countRef = useRef(0);
 
   const handleViewTypeChange = (type: ViewType) => {
     setViewType(type);
   };
 
   useEffect(() => {
-    if (fetchDuration && measurement && measurement.phase === "update") {
+    if (fetchDuration && measurement) {
       addMeasurement({ ...measurement, fetchDuration });
       setMeasurement(null);
       // set spinner to false
       onLoadingClose();
       toast({
-        title: "Measurement Created",
+        title: "Measurement Created - Mount phase",
         description: `New Measurement with id ${measurement.id} created successfully`,
         status: "success",
         duration: 5000,
@@ -74,12 +72,12 @@ const DataViews = () => {
       interactions,
     ] = args;
 
-    if (phase === "update" && countRef.current === 0) {
+    if (phase === "mount") {
       // add a new measurement to localstorage and show a snackbar on completion.
       // part of the profile date from this args object, part from time taken for fetch
       // which happens within the rendered component.
 
-      // measuring first update phase while rendering
+      // measuring mount phase while rendering
       setMeasurement({
         id: nanoid(),
         type: id as ViewType,
@@ -90,15 +88,13 @@ const DataViews = () => {
         commitTime,
         interactions,
       });
-      countRef.current++;
     }
   };
 
   const handleStart = () => {
     setStarted(false);
-    onLoadingOpen();
-    countRef.current = 0;
     // set spinner to true - saying profiling;
+    onLoadingOpen();
     setTimeout(() => {
       // remove view from dom node and render again after 2 seconds for new profiling
       setStarted(true);
@@ -109,7 +105,7 @@ const DataViews = () => {
     <Modal isOpen={isLoadingOpen} onClose={onLoadingClose}>
       <ModalOverlay />
       <ModalContent>
-        <ModalHeader>Creating Performace data</ModalHeader>
+        <ModalHeader>Creating Performance data</ModalHeader>
         <ModalBody>
           <Flex justifyContent="center" alignItems="center" h="20vh">
             <Spinner
@@ -141,13 +137,12 @@ const DataViews = () => {
             </Profiler>
           );
         case "tiles":
+        default:
           return (
             <Profiler id="tiles" onRender={handleProfile}>
               <Tiles />
             </Profiler>
           );
-        default:
-          return null;
       }
     }
     return null;
