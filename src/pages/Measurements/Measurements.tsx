@@ -125,9 +125,8 @@ const Measurements = () => {
       case "table":
         return <Table data={measurements} />;
       case "tiles":
-        return <Tiles data={measurements} />;
       default:
-        return null;
+        return <Tiles data={measurements} />;
     }
   };
 

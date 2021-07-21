@@ -1,7 +1,7 @@
 import { Heading, VStack } from "@chakra-ui/react";
 import { useFetch, useUtilityFns } from "hooks";
 import { GroupedDataType } from "types";
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useDispatch } from "react-redux";
 import { ResponsiveTable } from "reusable_components";
 
@@ -17,6 +17,7 @@ const GroupedTable = () => {
   const dispatch = useDispatch();
   const [data, setData] = useState<GroupedDataType>([]);
   const { groupByPostId } = useUtilityFns();
+  const columnInfo = useMemo(() => ColumnInfo, []);
 
   useEffect(() => {
     if (response) {
@@ -47,7 +48,7 @@ const GroupedTable = () => {
         <VStack key={postId}>
           <ResponsiveTable
             label={`Comments for Post ID ${postId}`}
-            columnInfo={ColumnInfo}
+            columnInfo={columnInfo}
             data={comments}
           />
         </VStack>
