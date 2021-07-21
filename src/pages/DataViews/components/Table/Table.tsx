@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useFetch } from "hooks";
 import { useDispatch } from "react-redux";
 import { ResponsiveTable } from "reusable_components";
@@ -14,6 +14,7 @@ const ColumnInfo = [
 const Table = () => {
   const { response, error, isLoading, fetchDuration } = useFetch();
   const dispatch = useDispatch();
+  const columnInfo = useMemo(() => ColumnInfo, []);
 
   useEffect(() => {
     if (fetchDuration) {
@@ -22,7 +23,7 @@ const Table = () => {
   }, [fetchDuration, dispatch]);
 
   if (isLoading) {
-    return <>Fetching table data"</>;
+    return <>Fetching table data</>;
   }
 
   if (error) {
@@ -32,7 +33,7 @@ const Table = () => {
   return (
     <ResponsiveTable
       label="Comments from Placeholder API"
-      columnInfo={ColumnInfo}
+      columnInfo={columnInfo}
       data={response || []}
     />
   );

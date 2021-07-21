@@ -1,12 +1,11 @@
 import * as hooks from "react-redux";
-import React, { ReactElement } from "react";
-import performanceReducer from "reducers/view-performace.reducer";
-import { createStore } from "redux";
-import { fireEvent, render as rtlRender, screen } from "@testing-library/react";
+import React from "react";
+import { fireEvent, screen } from "@testing-library/react";
 import { createMemoryHistory } from "history";
 import { Measurement } from "types";
 import Tiles from "../Tiles";
 import { Router } from "react-router-dom";
+import { getRender } from "test-utils";
 
 const initialState = { selectedMeasurements: [] };
 
@@ -37,24 +36,8 @@ const Measurements = [
   },
 ];
 
-function getRender(initialState: any) {
-  return function render(
-    ui: ReactElement,
-    {
-      store = createStore(performanceReducer, initialState),
-      ...renderOptions
-    } = {}
-  ) {
-    function Wrapper({ children }: any) {
-      return <hooks.Provider store={store}>{children}</hooks.Provider>;
-    }
-    return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
-  };
-}
-
 describe("Tiles", () => {
   let routeComponentPropsMock: any;
-
   let dispathMock: any;
 
   beforeEach(() => {

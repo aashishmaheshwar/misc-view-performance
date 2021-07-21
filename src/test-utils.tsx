@@ -1,9 +1,10 @@
 import * as React from "react";
-import { render } from "@testing-library/react";
+import { render as rtlRender } from "@testing-library/react";
 import { ChakraProvider, theme } from "@chakra-ui/react";
 import performanceReducer from "reducers/view-performace.reducer";
 import { Provider } from "react-redux";
 import { createStore } from "redux";
+import { ReactElement } from "react";
 
 const customRender = (
   ui: React.ReactElement,
@@ -15,10 +16,22 @@ const customRender = (
     </ChakraProvider>
   );
 
-  return render(ui, { wrapper: AllProviders, ...options });
+  return rtlRender(ui, { wrapper: AllProviders, ...options });
 };
 
-export { customRender as render };
-// function createStore(performanceReducer: any): any {
-//   throw new Error("Function not implemented.");
-// }
+function getRender(initialState: any) {
+  return function render(
+    ui: ReactElement,
+    {
+      store = createStore(performanceReducer, initialState),
+      ...renderOptions
+    } = {}
+  ) {
+    function Wrapper({ children }: any) {
+      return <Provider store={store}>{children}</Provider>;
+    }
+    return rtlRender(ui, { wrapper: Wrapper, ...renderOptions });
+  };
+}
+
+export { customRender as render, getRender };
