@@ -13,14 +13,14 @@ import React, { memo } from "react";
 
 interface ResponsiveTableProps {
   columnInfo: Array<{ key: string; label: string }>;
-  data?: Array<any>;
+  data: Array<any>;
   responsiveAt?: string;
   label: string;
 }
 
 const ResponsiveTable = ({
   columnInfo,
-  data = [],
+  data,
   responsiveAt = "925px",
   label,
 }: ResponsiveTableProps) => {
