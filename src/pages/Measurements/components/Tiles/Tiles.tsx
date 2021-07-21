@@ -112,7 +112,7 @@ const Tiles = ({ data: propData }: TileProps) => {
             colorScheme="orange"
             isChecked={selected}
             aria-checked={selected}
-            aria-labelledby={`Select measurement : ${id}`}
+            aria-label={`Select measurement : ${id}`}
             marginLeft="auto"
             onChange={handleSelect(tileIndex)}
             title="select"
