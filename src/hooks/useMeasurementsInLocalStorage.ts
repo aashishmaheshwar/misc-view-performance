@@ -9,12 +9,12 @@ export const useMeasurementsInLocalStorage = () => {
         
         return items ? JSON.parse(items) : [];
       } catch (error) {
-        console.log(error);
+        console.error(error);
         return [];
       }
     });
     
-    const addMeasurement = (value: Measurement) => {
+    const addMeasurement = (value: Measurement | Function) => {
       try {
         const valueToStore =
           value instanceof Function ? value(measurements) : value;
@@ -23,22 +23,8 @@ export const useMeasurementsInLocalStorage = () => {
         setMeasurements([...measurements, valueToStore]);
         window.localStorage.setItem('measurements', JSON.stringify([...measurements, valueToStore]));
       } catch (error) {
-        console.log(error);
+        console.error(error);
       }
-    };
-
-    const removeMeasurement = (deleteId: string) => {
-        try {
-            const updatedMeasurements = measurements.filter(({id}) => id !== deleteId);
-
-            setMeasurements([...updatedMeasurements]);
-            if (updatedMeasurements.length)
-                window.localStorage.setItem('measurements', JSON.stringify([...updatedMeasurements]));
-            else 
-                window.localStorage.removeItem('measurements');    
-        } catch (error) {
-            console.log(error);
-        }
     };
 
     const removeMeasurements = (measurementsToRemove: Array<Measurement>) => {
@@ -52,10 +38,10 @@ export const useMeasurementsInLocalStorage = () => {
           else 
               window.localStorage.removeItem('measurements');
       } catch (error) {
-          console.log(error);
+          console.error(error);
       }
   };
 
-    return {measurements, addMeasurement, removeMeasurement, removeMeasurements};
+    return {measurements, addMeasurement, removeMeasurements};
   }
   
