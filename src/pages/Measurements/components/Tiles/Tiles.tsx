@@ -9,11 +9,10 @@ import {
 } from "@chakra-ui/react";
 import { tileStyles } from "pages/DataViews/components/Tiles/components/Tile/TileStyles";
 import React, { ChangeEvent, useEffect, useMemo, useState } from "react";
-import { Measurement } from "types";
+import { Measurement, MeasurementWithSelectedState } from "types";
 import { format } from "date-fns";
 import { useDispatch, useSelector } from "react-redux";
 import { useHistory } from "react-router-dom";
-
 interface TileProps {
   data: Array<Measurement>;
 }
@@ -28,10 +27,6 @@ const MeasurementInfo: Array<{ label: string; key: string }> = [
   { label: "Base Duration", key: "baseDuration" },
   { label: "Fetch Duration", key: "fetchDuration" },
 ];
-
-interface MeasurementWithSelectedState extends Measurement {
-  selected?: boolean;
-}
 
 const Tiles = ({ data: propData }: TileProps) => {
   const measurementInfo = useMemo(() => MeasurementInfo, []);

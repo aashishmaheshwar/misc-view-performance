@@ -24,3 +24,7 @@ export interface Measurement {
   fetchDuration?: number;
   createdAt?: number;
 }
+
+export interface MeasurementWithSelectedState extends Measurement {
+  selected?: boolean;
+}
