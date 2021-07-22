@@ -58,7 +58,7 @@ describe("Measurements", () => {
       .mockImplementation(
         () =>
           ({
-            measurements: Measurements,
+            measurements: SampleMeasurements,
             addMeasurements: addMeasurementsMock,
             removeMeasurements: removeMeasurementsMock,
           } as any)
@@ -83,7 +83,7 @@ describe("Measurements", () => {
       expect(dispathMock).toHaveBeenLastCalledWith(
         expect.objectContaining({
           type: "ASSIGN_MEASUREMENTS",
-          payload: Measurements,
+          payload: SampleMeasurements,
         })
       );
     });
